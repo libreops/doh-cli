@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+import dns.message
+import requests
+import base64
+import json
+import argparse
+
+parser = argparse.ArgumentParser(
+    "doh-cli", description="eg. doh-cli libredns.gr A")
+parser.add_argument(
+    "--debug", help="show the entire response", action="store_true")
+parser.add_argument(
+    "--output", help="Display DNS response in plain|json format",
+    choices=["plain", "json"], default="json")
+parser.add_argument(
+    "--dns",
+    help="Choose DNS server: libredns, google, cloudflare, cleanbrowsing",
+    choices=["libredns", "libredns-ads", "google", "cloudflare", "quad9",
+             "cleanbrowsing"],
+    default="libredns")
+parser.add_argument("domain", help="The Domain Name System to resolve")
+parser.add_argument(
+    "RR", help="Resourse Records: A, AAAA or CNAME",
+    choices=["A", "AAAA", "CNAME"], default="A")
+args = parser.parse_args()
+
+jdns = []
+message = dns.message.make_query(args.domain, args.RR)
+dns_req = base64.b64encode(message.to_wire()).decode("UTF8").rstrip("=")
+
+url = {
+    "libredns":      "https://doh.libredns.gr/dns-query?dns=",
+    "libredns-ads":  "https://doh.libredns.gr/ads?dns=",
+    "google":        "https://dns.google/dns-query?dns=",
+    "cloudflare":    "https://cloudflare-dns.com/dns-query?dns=",
+    "quad9":         "https://dns.quad9.net/dns-query?dns=",
+    "cleanbrowsing": "https://doh.cleanbrowsing.org/doh/family-filter/?ct&dns=",
+}
+
+if args.debug:
+    print(url[args.dns] + dns_req)
+
+r = requests.get(url[args.dns] + dns_req,
+                 headers={"Content-type": "application/dns-message"})
+
+for answer in dns.message.from_wire(r.content).answer:
+    DNS = answer.to_text().split()
+    if args.output == "plain":
+        print(DNS[-1])
+    else:
+        jdns.append(
+            {"Query": DNS[0], "TTL": DNS[1], "RR": DNS[3], "Answer": DNS[4]})
+        print(json.dumps(jdns))
