@@ -5,6 +5,7 @@ setup(
     name='doh-cli',
     version=__version__,
     author='LibreOps',
+    author_email='team@libreops.cc',
     url='https://gitlab.com/libreops/doh-cli',
     description='a simple DNS-over-HTTPS client',
     long_description_content_type='text/markdown',
