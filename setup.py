@@ -7,6 +7,7 @@ setup(
     author='LibreOps',
     url='https://gitlab.com/libreops/doh-cli',
     description='a simple DNS-over-HTTPS client',
+    long_description_content_type='text/markdown',
     long_description=open('README.md').read(),
     include_package_data=True,
     zip_safe=False,
