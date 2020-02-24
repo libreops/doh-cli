@@ -39,6 +39,7 @@ dependencies locally:
 - https://cloudflare-dns.com
 - https://quad9.net
 - https://doh.cleanbrowsing.org
+- you may also provide your own DoH server URL
 
 ## Some Examples
 
@@ -126,4 +127,12 @@ or you can use LibreDNS Block Trackers endpoint:
 
 ```
 0.0.0.0
+```
+
+or provide your own DoH url:
+
+    doh-cli --output plain --dns https://doh.libredns.gr/dns-query www.example.com A
+
+```
+93.184.216.34
 ```
