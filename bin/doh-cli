@@ -14,6 +14,13 @@ url = {
     "cloudflare":    "https://cloudflare-dns.com/dns-query",
     "quad9":         "https://dns.quad9.net/dns-query",
     "cleanbrowsing": "https://doh.cleanbrowsing.org/doh/family-filter/?ct",
+    # CIRA's Canadian Shield
+    # - "Private is a free DNS resolution service"
+    # - "Protected adds malware and phishing blocking"
+    # - "Family blocks malware and phishing plus pornographic content"
+    "cira":          "https://private.canadianshield.cira.ca/dns-query",
+    "cira-protect":  "https://protected.canadianshield.cira.ca/dns-query",
+    "cira-family":   "https://family.canadianshield.cira.ca/dns-query",
 }
 
 parser = argparse.ArgumentParser(
