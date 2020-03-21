@@ -28,9 +28,7 @@ parser.add_argument(
     help="Choose DNS server: %s or provide your own url"%(','.join(url.keys()) ),
     default="libredns")
 parser.add_argument("domain", help="The Domain Name System to resolve")
-parser.add_argument(
-    "RR", help="Resourse Records: A, AAAA or CNAME",
-    choices=["A", "AAAA", "CNAME"], default="A")
+parser.add_argument("RR", nargs="?", help="Resourse Records: A, AAAA, CNAME, ext", default="A")
 args = parser.parse_args()
 
 jdns = []
