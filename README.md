@@ -39,6 +39,7 @@ dependencies locally:
 - https://cloudflare-dns.com
 - https://quad9.net
 - https://doh.cleanbrowsing.org
+- https://www.cira.ca/cybersecurity-services/canadian-shield
 - you may also provide your own DoH server URL
 
 ## Some Examples
