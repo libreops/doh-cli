@@ -6,6 +6,7 @@ import base64
 import json
 import argparse
 import sys
+import time
 
 url = {
     "libredns":      "https://doh.libredns.gr/dns-query",
@@ -14,28 +15,34 @@ url = {
     "cloudflare":    "https://cloudflare-dns.com/dns-query",
     "quad9":         "https://dns.quad9.net/dns-query",
     "cleanbrowsing": "https://doh.cleanbrowsing.org/doh/family-filter/?ct",
-    # CIRA's Canadian Shield
-    # - "Private is a free DNS resolution service"
-    # - "Protected adds malware and phishing blocking"
-    # - "Family blocks malware and phishing plus pornographic content"
     "cira":          "https://private.canadianshield.cira.ca/dns-query",
     "cira-protect":  "https://protected.canadianshield.cira.ca/dns-query",
     "cira-family":   "https://family.canadianshield.cira.ca/dns-query",
 }
 
 parser = argparse.ArgumentParser(
-    "doh-cli", description="eg. doh-cli libredns.gr A")
+    "doh-cli",
+    description="a simple DNS over HTTPS client",
+    epilog="eg. doh-cli libredns.gr")
+parser.add_argument("domain", help="The Domain Name System to resolve")
+parser.add_argument(
+    "RR", help="Resourse Records: A, AAAA or CNAME",
+    choices=["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV",
+             "TXT", "CAA"],
+    default="A", nargs='?')
 parser.add_argument(
     "--debug", help="show the entire response", action="store_true")
+parser.add_argument(
+    "--verbose", help="show the entire request", action="store_true")
 parser.add_argument(
     "--output", help="Display DNS response in plain|json format",
     choices=["plain", "json"], default="json")
 parser.add_argument(
     "--dns",
-    help="Choose DNS server: %s or provide your own url"%(','.join(url.keys()) ),
+    help="Choose DNS server: {} or provide your own url".format(', '.join(url.keys())),
     default="libredns")
-parser.add_argument("domain", help="The Domain Name System to resolve")
-parser.add_argument("RR", nargs="?", help="Resourse Records: A, AAAA, CNAME, ext", default="A")
+parser.add_argument(
+    "--time", help="show Query time", action="store_true")
 args = parser.parse_args()
 
 jdns = []
@@ -43,24 +50,37 @@ message = dns.message.make_query(args.domain, args.RR)
 dns_req = base64.b64encode(message.to_wire()).decode("UTF8").rstrip("=")
 
 endpoint = url[args.dns] if args.dns in url else args.dns
+
+start_time = time.time() * 1000
 try:
-    r = requests.get(url[args.dns] if args.dns in url else args.dns ,
-                    params= {'dns':dns_req},
-                    headers={"Content-type": "application/dns-message"})
+    r = requests.get(
+            url[args.dns] if args.dns in url else args.dns,
+            params={'dns': dns_req},
+            headers={"Content-type": "application/dns-message"})
 except Exception as e:
     sys.stderr.write(str(e))
     sys.exit(1)
-
+query_time = time.time() * 1000
 
 response = dns.message.from_wire(r.content)
+
 if args.debug:
-    sys.stderr.write(response.to_text())
+    print("%s \n" % response.to_text())
+
+if args.verbose:
+    verbose = url[args.dns] + dns_req
+    print("%s \n" % verbose)
+
+if args.time:
+    print("Query time: %0.3f \n" % (query_time - start_time))
 
 for answer in dns.message.from_wire(r.content).answer:
-    DNS = answer.to_text().split()
     if args.output == "plain":
-        print(DNS[-1])
+        delimeter = "IN " + args.RR + " "
+        DNS = answer.to_text().split(delimeter)[-1]
+        print(DNS)
     else:
+        DNS = answer.to_text().split()
         jdns.append(
-            {"Query": DNS[0], "TTL": DNS[1], "RR": DNS[3], "Answer": DNS[4]})
+            {"Query": DNS[0], "TTL": DNS[1], "RR": DNS[3], "Answer": DNS[4:99]})
         print(json.dumps(jdns))
