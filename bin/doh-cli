@@ -20,6 +20,15 @@ url = {
     "cira-family":   "https://family.canadianshield.cira.ca/dns-query",
 }
 
+try:
+    if '.' in sys.argv[2]:
+        swapme = sys.argv[2]
+        sys.argv[2] = sys.argv[1]
+        sys.argv[1] = swapme
+    sys.argv[2] = sys.argv[2].upper()
+except IndexError:
+    pass
+
 parser = argparse.ArgumentParser(
     "doh-cli",
     description="a simple DNS over HTTPS client",
