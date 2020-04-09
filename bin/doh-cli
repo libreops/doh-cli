@@ -20,16 +20,19 @@ url = {
     "cira-family":   "https://family.canadianshield.cira.ca/dns-query",
 }
 
+RR = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV", "TXT", "CAA"]
+
 parser = argparse.ArgumentParser(
     "doh-cli",
     description="a simple DNS over HTTPS client",
     epilog="eg. doh-cli libredns.gr")
+
 parser.add_argument("domain", help="The Domain Name System to resolve")
 parser.add_argument(
     "RR", help="Resourse Records: A, AAAA or CNAME",
-    choices=["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV",
-             "TXT", "CAA"],
+    metavar=RR,
     default="A", nargs='?')
+
 parser.add_argument(
     "--debug", help="show the entire response", action="store_true")
 parser.add_argument(
@@ -43,7 +46,17 @@ parser.add_argument(
     default="libredns")
 parser.add_argument(
     "--time", help="show Query time", action="store_true")
+
 args = parser.parse_args()
+
+if '.' in args.RR:
+    args.domain, args.RR = args.RR, args.domain
+
+args.RR = args.RR.upper()
+
+if args.RR not in RR:
+    parser.print_usage()
+    sys.exit(1)
 
 jdns = []
 message = dns.message.make_query(args.domain, args.RR)
