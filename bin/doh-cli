@@ -24,7 +24,7 @@ url = {
 # second has a dot, swap the two arguments as the one with the dot
 # is obviously a domain
 try:
-    if '-' not in sys.argv[1] and len(sys.argv)<=3:
+    if '-' not in sys.argv[1] and len(sys.argv) == 3:
         if '.' in sys.argv[2]:
             swapme = sys.argv[2]
             sys.argv[2] = sys.argv[1]
@@ -41,7 +41,7 @@ parser.add_argument(
     "RR", help="Resourse Records: A, AAAA or CNAME",
     choices=["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV",
              "TXT", "CAA"],
-    default="A", nargs='?', type = lambda s : s.upper())
+    default="A", nargs='?', type=lambda s: s.upper())
 parser.add_argument(
     "--debug", help="show the entire response", action="store_true")
 parser.add_argument(
