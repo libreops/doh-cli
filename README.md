@@ -2,7 +2,7 @@
 
 a simple **DNS over HTTPS** client
 
-This is a simple DoH python client (RFC 8484, GET), **json** output by default!
+This is a simple DoH python client (RFC 8484, GET), **plain** output by default, **json** output supported
 In less than 100 lines of code (more or less).
 
 ## Install
@@ -67,13 +67,21 @@ dependencies locally:
 
     doh-cli libredns.gr A
 
+```bash
+116.202.176.26
+```
+
+in json
+
+    doh-cli libredns.gr A --output json
+
 ```json
 [{"Query": "libredns.gr.", "TTL": "366", "RR": "A", "Answer": "116.202.176.26"}]
 ```
 
 you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
 
-    doh-cli libredns.gr A | jq .
+    doh-cli libredns.gr A --output json | jq .
 
 ```json
 [
@@ -88,7 +96,7 @@ you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
 
 ### IPv6
 
-    doh-cli libredns.gr AAAA | jq .
+    doh-cli libredns.gr AAAA --output json | jq .
 
 ```json
 [
@@ -103,7 +111,7 @@ you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
 
 ### CNAME
 
-    doh-cli www.libredns.gr CNAME | jq .
+    doh-cli www.libredns.gr CNAME --output json | jq .
 
 ```json
 [
@@ -118,7 +126,7 @@ you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
 
 ### MX
 
-    doh-cli libreops.cc MX | jq .
+    doh-cli libreops.cc MX --output json | jq .
 
 ```json
 [
@@ -142,7 +150,7 @@ you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
 
 ### CAA
 
-    doh-cli libredns.gr CAA
+    doh-cli libredns.gr CAA --output json
 
 ```json
 [{"Query": "libredns.gr.", "TTL": "590", "RR": "CAA", "Answer": ["0", "issue", "\"letsencrypt.org\""]}]
@@ -158,7 +166,7 @@ you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
 
 ### verbose
 
-    doh-cli libredns.gr A --output plain --verbose
+    doh-cli libredns.gr A --verbose
 
 ```bash
 https://doh.libredns.gr/dns-query?dns=lSIBAAABAAAAAAAACGxpYnJlZG5zAmdyAAABAAE
@@ -167,7 +175,7 @@ https://doh.libredns.gr/dns-query?dns=lSIBAAABAAAAAAAACGxpYnJlZG5zAmdyAAABAAE
 
 ### debug
 
-    doh-cli test.libredns.gr A --output plain --debug
+    doh-cli test.libredns.gr A --debug
 
 ```bash
 id 24169
@@ -187,7 +195,7 @@ libredns.gr. 1822 IN SOA ns1.gandi.net. hostmaster.gandi.net. 1582812814 10800 3
 
 ### Query time
 
-    doh-cli test.libredns.gr A --output plain --time
+    doh-cli test.libredns.gr A --time
 
 ```bash
 Query time: 531.764
@@ -195,7 +203,7 @@ Query time: 531.764
 116.202.176.26
 ```
 
-    doh-cli test.libredns.gr --time
+    doh-cli test.libredns.gr --time --output json
 
 ```bash
 Query time: 540.990
@@ -207,7 +215,7 @@ Disclaimer: This value is relative to python request against DoH service, not th
 
 ### Choose another DNS server
 
-    doh-cli libredns.gr A --output plain --dns cloudflare
+    doh-cli libredns.gr A --dns cloudflare
 
 ```bash
 116.202.176.26
@@ -215,7 +223,7 @@ Disclaimer: This value is relative to python request against DoH service, not th
 
 or you can use LibreDNS Block Trackers endpoint:
 
-    doh-cli --output plain --dns libredns-ads analytics.google.com A
+    doh-cli --dns libredns-ads analytics.google.com A
 
 ```bash
 0.0.0.0
@@ -223,7 +231,7 @@ or you can use LibreDNS Block Trackers endpoint:
 
 or provide your own DoH url:
 
-    doh-cli --output plain --dns https://doh.libredns.gr/dns-query www.example.com A
+    doh-cli --dns https://doh.libredns.gr/dns-query www.example.com A
 
 ```bash
 93.184.216.34
