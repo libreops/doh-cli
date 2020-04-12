@@ -249,7 +249,7 @@ doh-cli test.libredns.gr --time --output json | jq .
 ]
 ```
 
-**Disclaimer**: This value is related to the client request against DoH service, not the actual dns response.
+**Disclaimer**: This value is related to the client request towards the DoH provider, not the actual dns response.
 
 ### Choose another DNS server
 
