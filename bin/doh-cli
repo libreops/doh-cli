@@ -74,6 +74,10 @@ except Exception as e:
     sys.exit(1)
 query_time = time.time() * 1000
 
+if not r.ok:
+    print("HTTP status code: %s " % r.status_code)
+    sys.exit(1)
+
 response = dns.message.from_wire(r.content)
 
 if args.debug:
