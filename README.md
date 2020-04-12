@@ -2,8 +2,7 @@
 
 a simple **DNS over HTTPS** client
 
-This is a simple DoH python client (RFC 8484, GET), **plain** output by default, **json** output supported
-In less than 100 lines of code (more or less).
+This is a simple DoH python client (RFC 8484, GET), **plain** output by default, **json** output supported.
 
 ## Install
 
@@ -169,8 +168,8 @@ you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
     doh-cli libredns.gr A --verbose
 
 ```bash
-https://doh.libredns.gr/dns-query?dns=lSIBAAABAAAAAAAACGxpYnJlZG5zAmdyAAABAAE
 116.202.176.26
+Verbose: https://doh.libredns.gr/dns-query?dns=lSIBAAABAAAAAAAACGxpYnJlZG5zAmdyAAABAAE
 ```
 
 ### debug
@@ -178,7 +177,8 @@ https://doh.libredns.gr/dns-query?dns=lSIBAAABAAAAAAAACGxpYnJlZG5zAmdyAAABAAE
     doh-cli test.libredns.gr A --debug
 
 ```bash
-id 24169
+116.202.176.26
+Debug:  id 24169
 opcode QUERY
 rcode NOERROR
 flags QR RD RA
@@ -189,8 +189,6 @@ test.libredns.gr. 3600 IN A 116.202.176.26
 ;AUTHORITY
 libredns.gr. 1822 IN SOA ns1.gandi.net. hostmaster.gandi.net. 1582812814 10800 3600 604800 10800
 ;ADDITIONAL
-
-116.202.176.26
 ```
 
 ### Query time
@@ -198,20 +196,29 @@ libredns.gr. 1822 IN SOA ns1.gandi.net. hostmaster.gandi.net. 1582812814 10800 3
     doh-cli test.libredns.gr A --time
 
 ```bash
-Query time: 531.764
-
 116.202.176.26
+Query time:  531.764
 ```
 
-    doh-cli test.libredns.gr --time --output json
+    doh-cli test.libredns.gr --time --output json | jq .
 
-```bash
-Query time: 540.990
-
-[{"Query": "test.libredns.gr.", "TTL": "3600", "RR": "A", "Answer": ["116.202.176.26"]}]
+```json
+[
+  {
+    "Query": "test.libredns.gr.",
+    "TTL": "3600",
+    "RR": "A",
+    "Answer": [
+      "116.202.176.26"
+    ]
+  },
+  {
+    "Query Time": "476.537"
+  }
+]
 ```
 
-Disclaimer: This value is relative to python request against DoH service, not the actual dns response.
+**Disclaimer**: This value is relative to python request against DoH service, not the actual dns response.
 
 ### Choose another DNS server
 
