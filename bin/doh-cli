@@ -39,13 +39,13 @@ parser.add_argument(
     choices=["plain", "json"], default="plain")
 parser.add_argument(
     "--dns",
-    help="Choose DNS server: {} or provide your own url".format(', '.join(url.keys())),
+    help="Choose DNS server: {} or provide your own url".format(", ".join(url.keys())),
     metavar=list(url), default="libredns")
 parser.add_argument("--time", help="show Query time", action="store_true")
 
 args = parser.parse_args()
 
-if '.' in args.RR:
+if "." in args.RR:
     args.domain, args.RR = args.RR, args.domain
 
 args.RR = args.RR.upper()
@@ -64,7 +64,7 @@ start_time = time.time() * 1000
 try:
     r = requests.get(
             url[args.dns] if args.dns in url else args.dns,
-            params={'dns': dns_req},
+            params={"dns": dns_req},
             headers={"Content-type": "application/dns-message"})
 except Exception as e:
     sys.stderr.write(str(e))
@@ -72,7 +72,7 @@ except Exception as e:
 query_time = time.time() * 1000
 
 if not r.ok:
-    print("HTTP status code: %s " % r.status_code)
+    print("HTTP status code: {0} ".format(r.status_code))
     sys.exit(1)
 
 response = dns.message.from_wire(r.content)
@@ -94,11 +94,11 @@ for answer in dns.message.from_wire(r.content).answer:
         DNS = answer.to_text().split(delimeter)[-1]
         print(DNS)
         if DEBUG:
-            print("Debug:\t%s" % DEBUG)
+            print("Debug: {0}".format(DEBUG))
         if VERBOSE:
-            print("Verbose:\t%s" % VERBOSE)
+            print("Verbose: {0}".format(VERBOSE))
         if TIME:
-            print("Query Time:\t%s" % TIME)
+            print("Query Time: {0}".format(TIME))
     else:
         DNS = answer.to_text().split()
         jdns.append(
