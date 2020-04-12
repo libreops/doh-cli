@@ -26,12 +26,10 @@ parser = argparse.ArgumentParser(
     "doh-cli",
     description="a simple DNS over HTTPS client",
     epilog="eg. doh-cli libredns.gr")
-
 parser.add_argument("domain", help="The Domain Name System to resolve")
 parser.add_argument(
     "RR", help="Resourse Records: A, AAAA or CNAME",
     metavar=RR, default="A", nargs="?")
-
 parser.add_argument(
     "--debug", help="show the entire response", action="store_true")
 parser.add_argument(
@@ -42,9 +40,8 @@ parser.add_argument(
 parser.add_argument(
     "--dns",
     help="Choose DNS server: {} or provide your own url".format(', '.join(url.keys())),
-    metavar=url.keys(), default="libredns")
-parser.add_argument(
-    "--time", help="show Query time", action="store_true")
+    metavar=list(url), default="libredns")
+parser.add_argument("--time", help="show Query time", action="store_true")
 
 args = parser.parse_args()
 
@@ -76,23 +73,36 @@ query_time = time.time() * 1000
 
 response = dns.message.from_wire(r.content)
 
+DEBUG = VERBOSE = TIME = ""
+
 if args.debug:
-    print("%s \n" % response.to_text())
+    DEBUG = response.to_text()
 
 if args.verbose:
-    verbose = url[args.dns] + dns_req
-    print("%s \n" % verbose)
+    VERBOSE = url[args.dns] + dns_req
 
 if args.time:
-    print("Query time: %0.3f \n" % (query_time - start_time))
+    TIME = format(round((query_time - start_time), 3))
 
 for answer in dns.message.from_wire(r.content).answer:
     if args.output == "plain":
         delimeter = "IN " + args.RR + " "
         DNS = answer.to_text().split(delimeter)[-1]
         print(DNS)
+        if DEBUG:
+            print("Debug:\t%s" % DEBUG)
+        if VERBOSE:
+            print("Verbose:\t%s" % VERBOSE)
+        if TIME:
+            print("Query Time:\t%s" % TIME)
     else:
         DNS = answer.to_text().split()
         jdns.append(
             {"Query": DNS[0], "TTL": DNS[1], "RR": DNS[3], "Answer": DNS[4:99]})
+        if DEBUG:
+            jdns.append({"Debug": DEBUG})
+        if VERBOSE:
+            jdns.append({"Verbose": VERBOSE})
+        if TIME:
+            jdns.append({"Query Time": TIME})
         print(json.dumps(jdns))
