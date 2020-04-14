@@ -63,7 +63,7 @@ endpoint = url[args.dns] if args.dns in url else args.dns
 start_time = time.time() * 1000
 try:
     r = requests.get(
-            url[args.dns] if args.dns in url else args.dns,
+            endpoint,
             params={"dns": dns_req},
             headers={"Content-type": "application/dns-message"})
 except Exception as e:
@@ -83,7 +83,7 @@ if args.debug:
     DEBUG = response.to_text()
 
 if args.verbose:
-    VERBOSE = url[args.dns] + dns_req
+    VERBOSE = endpoint + dns_req
 
 if args.time:
     TIME = format(round((query_time - start_time), 3))
