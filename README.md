@@ -61,6 +61,7 @@ doh-cli --help
 - [Quad9](https://quad9.net)
 - [CleanBrowsing](https://doh.cleanbrowsing.org)
 - [CIRA](https://www.cira.ca/cybersecurity-services/canadian-shield)
+- [SecureDNS](https://securedns.eu/)
 - you may also provide your own DoH server URL
 
 ### DoH Options
@@ -70,10 +71,14 @@ doh-cli --help
 - google
 - cloudflare
 - quad9
-- cleanbrowsing
+- cleanbrowsing (blocks access to adult, pornographic and explicit sites, also VPNs)
+- cleanbrowsing-secure (blocks access to phishing, malware and malicious domains)
+- cleanbrowsing-adult (blocks access to all adult, pornographic and explicit sites)
 - cira (CIRA's Canadian Shield)
-- cira-protect (Protected adds malware and phishing blocking)
-- cira-family (Family blocks malware and phishing plus pornographic content)
+- cira-protect (Malware and phishing protection)
+- cira-family (blocking pornographic content plus protected)
+- securedns
+- securedns-ads (blockign ads, malware and phishing)
 
 ## Some Examples
 
