@@ -28,20 +28,20 @@ parser = argparse.ArgumentParser(
     epilog="eg. doh-cli libredns.gr")
 parser.add_argument("domain", help="The Domain Name System to resolve")
 parser.add_argument(
-    "RR", help="Resourse Records: A, AAAA or CNAME",
-    metavar=RR, default="A", nargs="?")
+    "RR", help="Supported DNS Resourse Records",
+    metavar="{}".format(", ".join(RR)), default="A", nargs="?")
 parser.add_argument(
     "--debug", help="show the entire response", action="store_true")
 parser.add_argument(
     "--verbose", help="show the entire request", action="store_true")
+parser.add_argument("--time", help="show Query time", action="store_true")
 parser.add_argument(
     "--output", help="Display DNS response in plain|json format",
     choices=["plain", "json"], default="plain")
 parser.add_argument(
     "--dns",
-    help="Choose DNS server: {} or provide your own url".format(", ".join(url.keys())),
-    metavar=list(url), default="libredns")
-parser.add_argument("--time", help="show Query time", action="store_true")
+    help="Choose DNS server or provide your own DoH endpoint",
+    metavar="{{{}}}".format(", ".join(list(url))), default="libredns")
 
 args = parser.parse_args()
 
