@@ -10,6 +10,14 @@ This is a simple DoH python client (RFC 8484, GET), which supports **plain** (de
 pip3 install doh-cli
 ```
 
+### Upgrade
+
+or upgrade to latest version by
+
+```bash
+pip install --upgrade doh-cli
+```
+
 ## Requirements
 
 It's based & tested on Python 3.
