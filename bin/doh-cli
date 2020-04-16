@@ -9,15 +9,19 @@ import sys
 import time
 
 url = {
-    "libredns":      "https://doh.libredns.gr/dns-query",
-    "libredns-ads":  "https://doh.libredns.gr/ads",
-    "google":        "https://dns.google/dns-query",
-    "cloudflare":    "https://cloudflare-dns.com/dns-query",
-    "quad9":         "https://dns.quad9.net/dns-query",
-    "cleanbrowsing": "https://doh.cleanbrowsing.org/doh/family-filter/?ct",
-    "cira":          "https://private.canadianshield.cira.ca/dns-query",
-    "cira-protect":  "https://protected.canadianshield.cira.ca/dns-query",
-    "cira-family":   "https://family.canadianshield.cira.ca/dns-query",
+    "libredns":             "https://doh.libredns.gr/dns-query",
+    "libredns-ads":         "https://doh.libredns.gr/ads",
+    "google":               "https://dns.google/dns-query",
+    "cloudflare":           "https://cloudflare-dns.com/dns-query",
+    "quad9":                "https://dns.quad9.net/dns-query",
+    "cleanbrowsing":        "https://doh.cleanbrowsing.org/doh/family-filter",
+    "cleanbrowsing-secure": "https://doh.cleanbrowsing.org/doh/security-filter",
+    "cleanbrowsing-adult":  "https://doh.cleanbrowsing.org/doh/adult-filter",
+    "cira":                 "https://private.canadianshield.cira.ca/dns-query",
+    "cira-protect":         "https://protected.canadianshield.cira.ca/dns-query",
+    "cira-family":          "https://family.canadianshield.cira.ca/dns-query",
+    "securedns":            "https://doh.securedns.eu/dns-query",
+    "securedns-ads":        "https://ads-doh.securedns.eu/dns-query",
 }
 
 RR = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV", "TXT", "CAA"]
