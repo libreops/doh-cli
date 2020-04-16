@@ -87,7 +87,8 @@ if args.debug:
     DEBUG = response.to_text()
 
 if args.verbose:
-    VERBOSE = endpoint + dns_req
+    DELIMETER = "?" if "?" not in endpoint else "&"
+    VERBOSE = endpoint + DELIMETER + "dns=" + dns_req
 
 if args.time:
     TIME = format(round((query_time - start_time), 3))
