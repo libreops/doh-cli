@@ -7,6 +7,7 @@ import json
 import argparse
 import sys
 import time
+from doh_cli import __version__
 
 url = {
     "libredns":             "https://doh.libredns.gr/dns-query",
@@ -47,7 +48,8 @@ parser.add_argument(
     "--url", help="Provide your own DoH endpoint",
     metavar="https://doh.libredns.gr/dns-query",
     default="https://doh.libredns.gr/dns-query")
-
+parser.add_argument(
+    '-v', '--version', action='version', version='{0} {1}'.format(parser.prog, __version__))
 args = parser.parse_args()
 
 if "." in args.RR:
