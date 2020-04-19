@@ -287,9 +287,11 @@ doh-cli --dns libredns-ads analytics.google.com A
 or provide your own DoH url:
 
 ```bash
-doh-cli --dns https://doh.libredns.gr/dns-query www.example.com A
+doh-cli --url https://doh.libredns.gr/dns-query www.example.com A
 ```
 
 ```bash
 93.184.216.34
 ```
+
+**Notice**: This option (--url) overrides the --dns option.

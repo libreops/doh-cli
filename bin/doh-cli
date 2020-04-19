@@ -27,8 +27,7 @@ url = {
 RR = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV", "TXT", "CAA"]
 
 parser = argparse.ArgumentParser(
-    "doh-cli",
-    description="a simple DNS over HTTPS client",
+    "doh-cli", description="a simple DNS over HTTPS client",
     epilog="eg. doh-cli libredns.gr")
 parser.add_argument("domain", help="The Domain Name System to resolve")
 parser.add_argument(
@@ -43,9 +42,11 @@ parser.add_argument(
     "--output", help="Display DNS response in plain|json format",
     choices=["plain", "json"], default="plain")
 parser.add_argument(
-    "--dns",
-    help="Choose DNS server or provide your own DoH endpoint",
-    metavar="{{{}}}".format(", ".join(list(url))), default="libredns")
+    "--dns", help="Choose DoH endpoint", choices=url, default="libredns")
+parser.add_argument(
+    "--url", help="Provide your own DoH endpoint",
+    metavar="https://doh.libredns.gr/dns-query",
+    default="https://doh.libredns.gr/dns-query")
 
 args = parser.parse_args()
 
@@ -61,7 +62,7 @@ if args.RR not in RR:
 message = dns.message.make_query(args.domain, args.RR)
 dns_req = base64.urlsafe_b64encode(message.to_wire()).decode("UTF8").rstrip("=")
 
-endpoint = url[args.dns] if args.dns in url else args.dns
+endpoint = args.url if args.url else args.dns
 
 start_time = time.time() * 1000
 try:
