@@ -84,7 +84,7 @@ if "application/dns-message" not in r.headers["Content-Type"]:
 
 response = dns.message.from_wire(r.content)
 
-jdns = []
+answers = []
 DEBUG = VERBOSE = TIME = ""
 
 if args.debug:
@@ -97,10 +97,13 @@ if args.verbose:
 if args.time:
     TIME = format(round((query_time - start_time), 3))
 
-for answer in dns.message.from_wire(r.content).answer:
+for response in dns.message.from_wire(r.content).answer:
+    answers = response.to_text().split("\n")
+
+for answer in answers:
     if args.output == "plain":
         delimeter = "IN " + args.RR + " "
-        DNS = answer.to_text().split(delimeter)[-1]
+        DNS = answer.split(delimeter)[-1]
         print(DNS)
         if DEBUG:
             print("Debug: {0}".format(DEBUG))
@@ -109,7 +112,8 @@ for answer in dns.message.from_wire(r.content).answer:
         if TIME:
             print("Query Time: {0}".format(TIME))
     else:
-        DNS = answer.to_text().split()
+        jdns = []
+        DNS = answer.split()
         jdns.append(
             {"Query": DNS[0], "TTL": DNS[1], "RR": DNS[3], "Answer": DNS[4:99]})
         if DEBUG:
