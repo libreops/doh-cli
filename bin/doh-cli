@@ -49,7 +49,7 @@ parser.add_argument(
     metavar="https://doh.libredns.gr/dns-query",
     default="https://doh.libredns.gr/dns-query")
 parser.add_argument(
-    '-v', '--version', action='version', version='{0} {1}'.format(parser.prog, __version__))
+    "-v", "--version", action="version", version="{0} {1}".format(parser.prog, __version__))
 args = parser.parse_args()
 
 if "." in args.RR:
