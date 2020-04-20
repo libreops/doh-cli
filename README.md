@@ -1,6 +1,6 @@
 # doh-cli
 
-a simple **DNS over HTTPS** client.
+A simple **DNS over HTTPS** client for the command line.
 
 This is a simple DoH python client (RFC 8484, GET), which supports **plain** (default) and **json** output.
 

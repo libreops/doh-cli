@@ -1,6 +1,17 @@
 from setuptools import setup
 from doh_cli import __version__
 
+
+def readme_md():
+    """Return contents of README.md"""
+    return open("README.md").read()
+
+
+def changelog_md():
+    """Return contents of Changelog.md"""
+    return open("Changelog.md").read()
+
+
 setup(
     name="doh-cli",
     version=__version__,
@@ -9,7 +20,7 @@ setup(
     url="https://gitlab.com/libreops/doh-cli",
     description="a simple DNS-over-HTTPS client",
     long_description_content_type="text/markdown",
-    long_description=open("README.md").read(),
+    long_description=readme_md() + "\n\n" + changelog_md(),
     include_package_data=True,
     zip_safe=False,
     license="LICENSE",
