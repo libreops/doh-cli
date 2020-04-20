@@ -68,13 +68,11 @@ endpoint = args.url if args.url else args.dns
 
 start_time = time.time() * 1000
 try:
-    r = requests.get(
-            endpoint,
-            params={"dns": dns_req},
-            headers={"Content-type": "application/dns-message"})
+    r = requests.get(endpoint, params={"dns": dns_req},
+                     headers={"Content-type": "application/dns-message"})
     r.raise_for_status()
-except Exception as e:
-    sys.stderr.write("{}\n".format(e))
+except requests.RequestException as reqerror:
+    sys.stderr.write("{}\n".format(reqerror))
     sys.exit(1)
 query_time = time.time() * 1000
 
