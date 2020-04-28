@@ -1,123 +1,66 @@
 #!/usr/bin/env python3
 
-import dns.message
-import requests
-import base64
-import json
 import argparse
 import sys
-import time
-from doh_cli import __version__
 
-url = {
-    "libredns":             "https://doh.libredns.gr/dns-query",
-    "libredns-ads":         "https://doh.libredns.gr/ads",
-    "google":               "https://dns.google/dns-query",
-    "cloudflare":           "https://cloudflare-dns.com/dns-query",
-    "quad9":                "https://dns.quad9.net/dns-query",
-    "cleanbrowsing":        "https://doh.cleanbrowsing.org/doh/family-filter",
+from doh_cli import __version__, resolve
+
+DOH_URL = {
+    "libredns": "https://doh.libredns.gr/dns-query",
+    "libredns-ads": "https://doh.libredns.gr/ads",
+    "google": "https://dns.google/dns-query",
+    "cloudflare": "https://cloudflare-dns.com/dns-query",
+    "quad9": "https://dns.quad9.net/dns-query",
+    "cleanbrowsing": "https://doh.cleanbrowsing.org/doh/family-filter",
     "cleanbrowsing-secure": "https://doh.cleanbrowsing.org/doh/security-filter",
-    "cleanbrowsing-adult":  "https://doh.cleanbrowsing.org/doh/adult-filter",
-    "cira":                 "https://private.canadianshield.cira.ca/dns-query",
-    "cira-protect":         "https://protected.canadianshield.cira.ca/dns-query",
-    "cira-family":          "https://family.canadianshield.cira.ca/dns-query",
-    "securedns":            "https://doh.securedns.eu/dns-query",
-    "securedns-ads":        "https://ads-doh.securedns.eu/dns-query",
+    "cleanbrowsing-adult": "https://doh.cleanbrowsing.org/doh/adult-filter",
+    "cira": "https://private.canadianshield.cira.ca/dns-query",
+    "cira-protect": "https://protected.canadianshield.cira.ca/dns-query",
+    "cira-family": "https://family.canadianshield.cira.ca/dns-query",
+    "securedns": "https://doh.securedns.eu/dns-query",
+    "securedns-ads": "https://ads-doh.securedns.eu/dns-query",
 }
 
 RR = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV", "TXT", "CAA"]
 
-parser = argparse.ArgumentParser(
-    "doh-cli", description="a simple DNS over HTTPS client",
-    epilog="eg. doh-cli libredns.gr")
-parser.add_argument("domain", help="The Domain Name System to resolve")
-parser.add_argument(
-    "RR", help="Supported DNS Resourse Records",
-    metavar="{}".format(", ".join(RR)), default="A", nargs="?")
-parser.add_argument(
-    "--debug", help="show the entire response", action="store_true")
-parser.add_argument(
-    "--verbose", help="show the entire request", action="store_true")
-parser.add_argument("--time", help="show Query time", action="store_true")
-parser.add_argument(
-    "--output", help="Display DNS response in plain|json format",
-    choices=["plain", "json"], default="plain")
-parser.add_argument(
-    "--dns", help="Choose DoH endpoint", choices=url, default="libredns")
-parser.add_argument(
-    "--url", help="Provide your own DoH endpoint",
-    metavar="https://doh.libredns.gr/dns-query",
-    default="https://doh.libredns.gr/dns-query")
-parser.add_argument(
-    "-v", "--version", action="version", version="{0} {1}".format(parser.prog, __version__))
-args = parser.parse_args()
 
-if "." in args.RR:
-    args.domain, args.RR = args.RR, args.domain
+if __name__ == '__main__':
 
-args.RR = args.RR.upper()
+    parser = argparse.ArgumentParser(
+        "doh-cli", description="a simple DNS over HTTPS client",
+        epilog="eg. doh-cli libredns.gr")
+    parser.add_argument("domain", help="The Domain Name System to resolve")
+    parser.add_argument(
+        "rr", help="Supported DNS Resourse Records",
+        metavar="{0}".format(", ".join(RR)), default="A", nargs="?")
+    parser.add_argument(
+        "--debug", help="show the entire response", action="store_true")
+    parser.add_argument(
+        "--verbose", help="show the entire request", action="store_true")
+    parser.add_argument("--time", help="show Query time", action="store_true")
+    parser.add_argument(
+        "--output", help="Display DNS response in plain|json format",
+        choices=["plain", "json"], default="plain")
+    parser.add_argument(
+        "--dns", help="Choose DoH endpoint", choices=DOH_URL, default="libredns")
+    parser.add_argument(
+        "--url", help="Provide your own DoH endpoint",
+        metavar="https://doh.libredns.gr/dns-query",
+        default="https://doh.libredns.gr/dns-query")
+    parser.add_argument(
+        "-v", "--version", action="version", version="{0} {1}".format(parser.prog, __version__))
+    args = parser.parse_args()
 
-if args.RR not in RR:
-    parser.print_usage()
-    sys.exit(1)
+    if "." in args.rr:
+        args.domain, args.rr = args.rr, args.domain
 
-message = dns.message.make_query(args.domain, args.RR)
-dns_req = base64.urlsafe_b64encode(message.to_wire()).decode("UTF8").rstrip("=")
+    args.rr = args.rr.upper()
 
-endpoint = args.url if args.url else args.dns
+    if args.rr not in RR:
+        parser.print_usage()
+        sys.exit(1)
 
-start_time = time.time() * 1000
-try:
-    r = requests.get(endpoint, params={"dns": dns_req},
-                     headers={"Content-type": "application/dns-message"})
-    r.raise_for_status()
-except requests.RequestException as reqerror:
-    sys.stderr.write("{}\n".format(reqerror))
-    sys.exit(1)
-query_time = time.time() * 1000
+    endpoint = args.url if args.url else args.dns
 
-if "application/dns-message" not in r.headers["Content-Type"]:
-    print("The answer from: {0} is not a DNS response!".format(endpoint))
-    sys.exit(1)
-
-response = dns.message.from_wire(r.content)
-
-answers = []
-DEBUG = VERBOSE = TIME = ""
-
-if args.debug:
-    DEBUG = response.to_text()
-
-if args.verbose:
-    DELIMETER = "?" if "?" not in endpoint else "&"
-    VERBOSE = endpoint + DELIMETER + "dns=" + dns_req
-
-if args.time:
-    TIME = format(round((query_time - start_time), 3))
-
-for response in dns.message.from_wire(r.content).answer:
-    answers = response.to_text().split("\n")
-
-for answer in answers:
-    if args.output == "plain":
-        delimeter = "IN " + args.RR + " "
-        DNS = answer.split(delimeter)[-1]
-        print(DNS)
-        if DEBUG:
-            print("Debug: {0}".format(DEBUG))
-        if VERBOSE:
-            print("Verbose: {0}".format(VERBOSE))
-        if TIME:
-            print("Query Time: {0}".format(TIME))
-    else:
-        jdns = []
-        DNS = answer.split()
-        jdns.append(
-            {"Query": DNS[0], "TTL": DNS[1], "RR": DNS[3], "Answer": DNS[4:99]})
-        if DEBUG:
-            jdns.append({"Debug": DEBUG})
-        if VERBOSE:
-            jdns.append({"Verbose": VERBOSE})
-        if TIME:
-            jdns.append({"Query Time": TIME})
-        print(json.dumps(jdns))
+    resolve.answer(args.domain, args.rr, endpoint, args.output,
+                   args.debug, args.verbose, args.time)
