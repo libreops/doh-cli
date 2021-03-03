@@ -2,6 +2,19 @@
 
 This document tracks all notable changes to doh-cli, introduced on each release.
 
+## v0.4 - 2021-03-02
+
+- Update Documentation Notes
+- Add custom DoH endpoint --url option
+- Add version option to doh-cli
+- Add cleanbrowsing & securedns DoH Endpoints
+- Verbose option returns the rest DoH request
+- Show multiple DNS answers when exist
+- Use base64url for dns request message
+- DNS response should have "application/dns-message" headers
+- Using RequestException instead of generic Exception
+- Split module for readability and modularity
+
 ## v0.3 - 2020-04-12
 
 - Swapping positional arguments (domain, RR) if needed
