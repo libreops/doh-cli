@@ -47,8 +47,8 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None, response_time
     for answer in answers:
         if output == "plain":
             delimeter = "IN " + rr + " "
-            output = answer.split(delimeter)[-1]
-            print(output)
+            final_output = answer.split(delimeter)[-1]
+            print(final_output)
             if debug:
                 print("Debug: {0}".format(debug))
             if verbose:
@@ -57,9 +57,10 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None, response_time
                 print("Query Time: {0}".format(response_time))
         else:
             jdns = []
-            output = answer.split()
+            final_output = answer.split()
             jdns.append(
-                {"Query": output[0], "TTL": output[1], "RR": output[3], "Answer": output[4:99]})
+                {"Query": final_output[0], "TTL": final_output[1], "RR":
+                    final_output[3], "Answer": final_output[4:99]})
             if debug:
                 jdns.append({"Debug": debug})
             if verbose:
