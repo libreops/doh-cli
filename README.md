@@ -52,6 +52,8 @@ doh-cli --help
 - SRV
 - TXT
 - CAA
+- DNSKEY
+- DS
 
 ## Supported DoH Providers
 
@@ -188,6 +190,55 @@ doh-cli libredns.gr CAA --output json
 ```json
 [{"Query": "libredns.gr.", "TTL": "590", "RR": "CAA", "Answer": ["0", "issue", "\"letsencrypt.org\""]}]
 ```
+
+### DNSKEY
+
+> DNS Key record 	The key record used in DNSSEC. Uses the same format as the KEY record.
+
+```bash
+doh-cli DNSKEY nasa.gov --output plain
+
+256 3 8 AwEAAd86yGbz2WUp4VqClb1svSW9oyx0 CQqCCGebNIEEqbXsF5PtCz225RKL3cDr mPHIeSETR6iUvfPSDiKquYearoLFmPjU 0q1AJJmrZIzl9rDgMx/c9OPJxBnhp196 ntJEaGySgXSoaXQEdUpm8lZzhkjftTfC X9mwDY2abxa3Vq3t
+256 3 8 AwEAAa/Jh5zZ/apbhzIG6CEUT8LL+WNK +HuVLbFf/pxk5Q/Qmng08J1+24B5ObWK +lUNGHN/FYC0TVbbofeHHOLVS88CBmK9 Zu5RWqDicYYKFu8vra+MXEcwLc6E0fTf R9I/OAIWF6GScPHnkq8GoK2qau8gSD96 UsAw6mCsWEqdyqof
+257 3 8 AwEAAbo7ImTCXl2KuV8NK+0zEvLC+OrN M0/6rT/kKZncFc0CqIIQwZUJtdurpvi3 mUFY0J6Pv394E2gu/OLOe+EcIRatjxSv KITBM+PJTJq0OtwsGtBQyu4uU8hS2SNE g1hEJVGHE5q5LWIAy01TBnibyGOyVJE4 N3M50ezp4E7DqEYG6WkhZQxLDjn0T4ex KPDqIkP+QUB6OwF2CWKtWtpPIpI1i9h9 OgIWUfXb3uLEgcnJlAYYAf9Jw35hPPDo FP+Zi9fJ4mQ0olm8gj4668QZoCJ57MDr 3p3Rntfw5Ca+AQVNwnaqcB7iUWHYPZP0 KLk7V02NloWXpwNHOA8O1TsOYtc=
+
+```
+
+### DS
+
+>Delegation signer 	The record used to identify the DNSSEC signing key of a delegated zone
+
+```bash
+doh-cli nasa.gov DS --output=json | jq .
+
+[
+  {
+    "Query": "nasa.gov.",
+    "TTL": "3588",
+    "RR": "DS",
+    "Answer": [
+      "41452",
+      "8",
+      "2",
+      "7490b7f47af44d4c0bed3a7a2fefeb50cf55e3209e5a82e30a44f9d4aa9ae688"
+    ]
+  }
+]
+[
+  {
+    "Query": "nasa.gov.",
+    "TTL": "3588",
+    "RR": "DS",
+    "Answer": [
+      "41452",
+      "8",
+      "1",
+      "83bb6c5ac559bbe1e8b17a98465145265a3cafc4"
+    ]
+  }
+]
+```
+
 
 ### Plain Output
 

@@ -21,7 +21,7 @@ DOH_URL = {
     "securedns-ads": "https://ads-doh.securedns.eu/dns-query",
 }
 
-RR = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV", "TXT", "CAA"]
+RR = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV", "TXT", "CAA", "DNSKEY", "DS"]
 
 
 if __name__ == '__main__':
