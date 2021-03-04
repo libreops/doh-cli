@@ -52,6 +52,8 @@ doh-cli --help
 - SRV
 - TXT
 - CAA
+- DNSKEY
+- DS
 
 ## Supported DoH Providers
 
