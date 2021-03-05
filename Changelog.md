@@ -2,6 +2,12 @@
 
 This document tracks all notable changes to doh-cli, introduced on each release.
 
+## v0.5 - 2021-03-05
+
+- Add support for DNSKEY and DS RRs
+- Update README with new RR examples
+- Fix output bug on multiple answers
+
 ## v0.4 - 2021-03-02
 
 - Update Documentation Notes
