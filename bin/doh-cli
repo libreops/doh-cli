@@ -38,6 +38,7 @@ if __name__ == '__main__':
     parser.add_argument(
         "--verbose", help="show the entire request", action="store_true")
     parser.add_argument("--time", help="show Query time", action="store_true")
+    parser.add_argument("--dnssec", help="request DNSSEC signatures", action='store_true')
     parser.add_argument(
         "--output", help="Display DNS response in plain|json format",
         choices=["plain", "json"], default="plain")
@@ -63,4 +64,5 @@ if __name__ == '__main__':
     endpoint = args.url if args.url else args.dns
 
     resolve.answer(args.domain, args.rr, endpoint, args.output,
-                   args.debug, args.verbose, args.time)
+                   args.debug, args.verbose, args.time,
+                   args.dnssec)

@@ -239,6 +239,16 @@ doh-cli nasa.gov DS --output=json | jq .
 ]
 ```
 
+### DNSSEC
+
+Using `--dnssec` sets the `EDNS DO` flag. The response will then include the DNSSEC signature for the requested record set.
+
+```bash
+doh-cli A nasa.gov --dnssec
+52.0.14.116
+23.22.39.120
+8 2 600 20210325164559 20210223160609 6816 nasa.gov. HqVx19SOdF4Mx2+UZl7rhecv99zJdj07 86R7sAAXP2poG5QDa9zpYz7WXz/y2UtV HpMk+0gfb2SrxQ1p93+VWs0S2UxnwZQI 8qtwuB6/9780LVLa8ZHEDVZzdO1NAAx1 AfaaQ0FjoxErPipPBi4edvMSYjnvVhY+ 0baRH2i1syk=
+```
 
 ### Plain Output
 
