@@ -4,6 +4,7 @@ import base64
 import json
 import sys
 import time
+import itertools
 
 
 def answer(domain, rr, endpoint, output, debug=None, verbose=None,
@@ -12,9 +13,10 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None,
     Sends query to DNS provider and prints the answer.
     """
     message = dns.message.make_query(domain, rr)
+
     if request_dnssec:
-        message.use_edns(edns=True)
-        message.want_dnssec(request_dnssec)
+        message.want_dnssec()
+
     dns_req = base64.urlsafe_b64encode(message.to_wire()).decode("UTF8").rstrip("=")
 
     start_time = time.time() * 1000
@@ -45,20 +47,20 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None,
 
     answers = []
 
-    # append all answers from response in a list
     for response in dns.message.from_wire(r.content).answer:
         answers.append(response.to_text().split("\n"))
 
+    answers = list(itertools.chain.from_iterable(answers))
+
     if output == "plain":
         for answer in answers:
-            for item in answer:
-                delimeter = "IN " + rr + " "
-                if request_dnssec and 'IN RRSIG' in item:
-                    delimeter = "IN RRSIG " + rr + " "
-                output_plain = item.split(delimeter)[-1]
-                print(output_plain)
+            delimeter = "IN " + rr + " "
+            if request_dnssec and 'IN RRSIG' in answer:
+                delimeter = "IN RRSIG " + rr + " "
+            output_plain = answer.split(delimeter)[-1]
+            print(output_plain)
         if debug:
-            print("Debug:\n{0}".format(debug))
+            print("Debug: \n{0}".format(debug))
         if verbose:
             print("Verbose: {0}".format(verbose))
         if response_time:
@@ -66,11 +68,10 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None,
     else:
         jdns = []
         for answer in answers:
-            for item in answer:
-                output_json = item.split()
-                jdns.append(
-                    {"Query": output_json[0], "TTL": output_json[1], "RR":
-                        output_json[3], "Answer": output_json[4:99]})
+            output_json = answer.split()
+            jdns.append(
+                {"Query": output_json[0], "TTL": output_json[1],
+                 "RR": output_json[3], "Answer": output_json[4:99]})
         if debug:
             jdns.append({"Debug": debug})
         if verbose:
