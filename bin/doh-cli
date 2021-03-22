@@ -63,6 +63,5 @@ if __name__ == '__main__':
 
     endpoint = args.url if args.url else args.dns
 
-    resolve.answer(args.domain, args.rr, endpoint, args.output,
-                   args.debug, args.verbose, args.time,
-                   args.dnssec)
+    resolve.answer(args.domain, args.rr, endpoint, args.output, args.debug,
+                   args.verbose, args.time, args.dnssec)
