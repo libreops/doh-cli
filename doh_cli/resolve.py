@@ -52,20 +52,7 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None,
 
     answers = list(itertools.chain.from_iterable(answers))
 
-    if output == "plain":
-        for answer in answers:
-            delimeter = "IN " + rr + " "
-            if request_dnssec and 'IN RRSIG' in answer:
-                delimeter = "IN RRSIG " + rr + " "
-            output_plain = answer.split(delimeter)[-1]
-            print(output_plain)
-        if debug:
-            print("Debug: \n{0}".format(debug))
-        if verbose:
-            print("Verbose: {0}".format(verbose))
-        if response_time:
-            print("Query Time: {0}".format(response_time))
-    else:
+    if output:
         jdns = []
         for answer in answers:
             output_json = answer.split()
@@ -79,3 +66,17 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None,
         if response_time:
             jdns.append({"Query Time": response_time})
         print(json.dumps(jdns))
+        return
+
+    for answer in answers:
+        delimeter = "IN " + rr + " "
+        if request_dnssec and 'IN RRSIG' in answer:
+            delimeter = "IN RRSIG " + rr + " "
+        output_plain = answer.split(delimeter)[-1]
+        print(output_plain)
+    if debug:
+        print("Debug: \n{0}".format(debug))
+    if verbose:
+        print("Verbose: {0}".format(verbose))
+    if response_time:
+        print("Query Time: {0}".format(response_time))

@@ -39,9 +39,7 @@ if __name__ == '__main__':
         "--verbose", help="show the entire request", action="store_true")
     parser.add_argument("--time", help="show Query time", action="store_true")
     parser.add_argument("--dnssec", help="request DNSSEC signatures", action='store_true')
-    parser.add_argument(
-        "--output", help="Display DNS response in plain|json format",
-        choices=["plain", "json"], default="plain")
+    parser.add_argument("--json", help="Display DNS response in json format", action='store_true')
     parser.add_argument(
         "--dns", help="Choose DoH endpoint", choices=DOH_URL, default="libredns")
     parser.add_argument(
@@ -63,5 +61,5 @@ if __name__ == '__main__':
 
     endpoint = args.url if args.url else args.dns
 
-    resolve.answer(args.domain, args.rr, endpoint, args.output, args.debug,
+    resolve.answer(args.domain, args.rr, endpoint, args.json, args.debug,
                    args.verbose, args.time, args.dnssec)

@@ -97,7 +97,7 @@ doh-cli libredns.gr A
 in json
 
 ```bash
-doh-cli libredns.gr A --output json
+doh-cli libredns.gr A --json
 ```
 
 ```json
@@ -107,7 +107,7 @@ doh-cli libredns.gr A --output json
 you can use [jq](https://stedolan.github.io/jq/) to format, parse output:
 
 ```bash
-doh-cli libredns.gr A --output json | jq .
+doh-cli libredns.gr A --json | jq .
 ```
 
 ```json
@@ -124,24 +124,31 @@ doh-cli libredns.gr A --output json | jq .
 ### IPv6
 
 ```bash
-doh-cli libredns.gr AAAA --output json | jq .
+doh-cli example.org AAAA
+
+2606:2800:220:1:248:1893:25c8:1946
 ```
 
 ```json
+doh-cli example.org AAAA --json | jq .
+
 [
   {
-    "Query": "libredns.gr.",
-    "TTL": "207",
+    "Query": "example.org.",
+    "TTL": "45832",
     "RR": "AAAA",
-    "Answer": "2a01:4f8:c2c:52bf::1"
+    "Answer": [
+      "2606:2800:220:1:248:1893:25c8:1946"
+    ]
   }
 ]
+
 ```
 
 ### CNAME
 
 ```bash
-doh-cli www.libredns.gr CNAME --output json | jq .
+doh-cli www.libredns.gr CNAME --json | jq .
 ```
 
 ```json
@@ -158,7 +165,7 @@ doh-cli www.libredns.gr CNAME --output json | jq .
 ### MX
 
 ```bash
-doh-cli libreops.cc MX --output json | jq .
+doh-cli libreops.cc MX --json | jq .
 ```
 
 ```json
@@ -184,7 +191,7 @@ doh-cli libreops.cc MX --output json | jq .
 ### CAA
 
 ```bash
-doh-cli libredns.gr CAA --output json
+doh-cli libredns.gr CAA --json
 ```
 
 ```json
@@ -196,7 +203,7 @@ doh-cli libredns.gr CAA --output json
 > DNS Key record 	The key record used in DNSSEC. Uses the same format as the KEY record.
 
 ```bash
-doh-cli DNSKEY nasa.gov --output plain
+doh-cli DNSKEY nasa.gov
 
 256 3 8 AwEAAd86yGbz2WUp4VqClb1svSW9oyx0 CQqCCGebNIEEqbXsF5PtCz225RKL3cDr mPHIeSETR6iUvfPSDiKquYearoLFmPjU 0q1AJJmrZIzl9rDgMx/c9OPJxBnhp196 ntJEaGySgXSoaXQEdUpm8lZzhkjftTfC X9mwDY2abxa3Vq3t
 256 3 8 AwEAAa/Jh5zZ/apbhzIG6CEUT8LL+WNK +HuVLbFf/pxk5Q/Qmng08J1+24B5ObWK +lUNGHN/FYC0TVbbofeHHOLVS88CBmK9 Zu5RWqDicYYKFu8vra+MXEcwLc6E0fTf R9I/OAIWF6GScPHnkq8GoK2qau8gSD96 UsAw6mCsWEqdyqof
@@ -253,7 +260,7 @@ doh-cli A nasa.gov --dnssec
 ### Plain Output
 
 ```bash
-doh-cli libredns.gr A --output plain
+doh-cli libredns.gr A
 ```
 
 ```bash
@@ -304,7 +311,7 @@ Query time:  531.764
 ```
 
 ```bash
-doh-cli test.libredns.gr --time --output json | jq .
+doh-cli test.libredns.gr --time --json | jq .
 ```
 
 ```json
