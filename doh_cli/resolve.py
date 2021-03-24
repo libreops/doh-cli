@@ -7,8 +7,8 @@ import time
 import itertools
 
 
-def answer(domain, rr, endpoint, output, debug=None, verbose=None,
-           response_time=None, request_dnssec=False):
+def answer(domain, rr, endpoint, format_json=None, debug=None, verbose=None,
+           response_time=None, request_dnssec=None):
     """
     Sends query to DNS provider and prints the answer.
     """
@@ -52,7 +52,7 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None,
 
     answers = list(itertools.chain.from_iterable(answers))
 
-    if output:
+    if format_json:
         jdns = []
         for answer in answers:
             output_json = answer.split()
@@ -65,18 +65,19 @@ def answer(domain, rr, endpoint, output, debug=None, verbose=None,
             jdns.append({"Verbose": verbose})
         if response_time:
             jdns.append({"Query Time": response_time})
-        print(json.dumps(jdns))
-        return
+        return json.dumps(jdns)
 
+    output_plain = ""
     for answer in answers:
         delimeter = "IN " + rr + " "
         if request_dnssec and 'IN RRSIG' in answer:
             delimeter = "IN RRSIG " + rr + " "
-        output_plain = answer.split(delimeter)[-1]
-        print(output_plain)
+        output_plain += "{0}\n".format(answer.split(delimeter)[-1])
     if debug:
-        print("Debug: \n{0}".format(debug))
+        output_plain += "\nDebug: \n{0}\n".format(debug)
     if verbose:
-        print("Verbose: {0}".format(verbose))
+        output_plain += "\nVerbose: \n{0}\n".format(verbose)
     if response_time:
-        print("Query Time: {0}".format(response_time))
+        output_plain += "\nQuery Time: \n{0}\n".format(response_time)
+
+    return output_plain
