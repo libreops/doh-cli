@@ -26,28 +26,22 @@ RR = ["A", "AAAA", "CNAME", "MX", "NS", "SOA", "SPF", "SRV", "TXT", "CAA", "DNSK
 
 if __name__ == '__main__':
 
-    parser = argparse.ArgumentParser(
-        "doh-cli", description="a simple DNS over HTTPS client",
-        epilog="eg. doh-cli libredns.gr")
+    parser = argparse.ArgumentParser("doh-cli", description="a simple DNS over HTTPS client",
+                                     epilog="eg. doh-cli libredns.gr")
     parser.add_argument("domain", help="The Domain Name System to resolve")
-    parser.add_argument(
-        "rr", help="Supported DNS Resourse Records",
-        metavar="{0}".format(", ".join(RR)), default="A", nargs="?")
-    parser.add_argument(
-        "--debug", help="show the entire response", action="store_true")
-    parser.add_argument(
-        "--verbose", help="show the entire request", action="store_true")
+    parser.add_argument("rr", help="Supported DNS Resourse Records",
+                        metavar="{0}".format(", ".join(RR)), default="A", nargs="?")
+    parser.add_argument("--debug", help="show the entire response", action="store_true")
+    parser.add_argument("--verbose", help="show the entire request", action="store_true")
     parser.add_argument("--time", help="show Query time", action="store_true")
     parser.add_argument("--dnssec", help="request DNSSEC signatures", action='store_true')
     parser.add_argument("--json", help="Display DNS response in json format", action='store_true')
-    parser.add_argument(
-        "--dns", help="Choose DoH endpoint", choices=DOH_URL, default="libredns")
-    parser.add_argument(
-        "--url", help="Provide your own DoH endpoint",
-        metavar="https://doh.libredns.gr/dns-query",
-        default="https://doh.libredns.gr/dns-query")
-    parser.add_argument(
-        "-v", "--version", action="version", version="{0} {1}".format(parser.prog, __version__))
+    parser.add_argument("--dns", help="Choose DoH endpoint", choices=DOH_URL, default="libredns")
+    parser.add_argument("--url", help="Provide your own DoH endpoint",
+                        metavar="https://doh.libredns.gr/dns-query",
+                        default="https://doh.libredns.gr/dns-query")
+    parser.add_argument("-v", "--version", action="version",
+                        version="{0} {1}".format(parser.prog, __version__))
     args = parser.parse_args()
 
     if "." in args.rr:
