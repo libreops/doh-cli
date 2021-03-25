@@ -2,6 +2,16 @@
 
 This document tracks all notable changes to doh-cli, introduced on each release.
 
+## v0.6 - 2021-03-25
+
+- Add support to request DNSSEC signatures
+- Support handling multiple answer sections in a response
+- Use itertools to append multiple dns answers
+- Simplify doh-cli plain/json usage
+- Enhance code readability
+- Make doh-cli module more independent
+- Update README accordingly
+
 ## v0.5 - 2021-03-05
 
 - Add support for DNSKEY and DS RRs
