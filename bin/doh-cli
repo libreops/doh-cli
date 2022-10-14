@@ -37,9 +37,7 @@ if __name__ == '__main__':
     parser.add_argument("--dnssec", help="request DNSSEC signatures", action='store_true')
     parser.add_argument("--json", help="Display DNS response in json format", action='store_true')
     parser.add_argument("--dns", help="Choose DoH endpoint", choices=DOH_URL, default="libredns")
-    parser.add_argument("--url", help="Provide your own DoH endpoint",
-                        metavar="https://doh.libredns.gr/dns-query",
-                        default="https://doh.libredns.gr/dns-query")
+    parser.add_argument("--url", help="Provide your own DoH endpoint")
     parser.add_argument("-v", "--version", action="version",
                         version="{0} {1}".format(parser.prog, __version__))
     args = parser.parse_args()
@@ -53,7 +51,7 @@ if __name__ == '__main__':
         parser.print_usage()
         sys.exit(1)
 
-    endpoint = args.url if args.url else args.dns
+    endpoint = args.url if args.url else DOH_URL[args.dns]
 
     output = resolve.answer(args.domain, args.rr, endpoint, args.json, args.debug,
                             args.verbose, args.time, args.dnssec)
