@@ -45,11 +45,13 @@ doh-cli --help
 - A
 - AAAA
 - CNAME
+- HTTPS
 - MX
 - NS
 - SOA
 - SPF
 - SRV
+- SVCB
 - TXT
 - CAA
 - DNSKEY
