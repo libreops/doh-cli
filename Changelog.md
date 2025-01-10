@@ -2,9 +2,13 @@
 
 This document tracks all notable changes to doh-cli, introduced on each release.
 
+## v0.8 - 2025-01-10
+
+- Added support for RFC9460
+
 ## v0.7 - 2022-10-29
 
-- Argument url is overwriting dns argument with it's default value (fix bug).
+- Argument url is overwriting dns argument with it's default value (fix bug)
 
 ## v0.6 - 2021-03-25
 
